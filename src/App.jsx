@@ -1,8 +1,15 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import Card from "./components/Card.jsx";
 
 function App() {
+  // async function fetchImages() {
+  //   try {
+  //     let response = await axios.get("https://pokeapi.co/api/v2/pokemon/ditto");
+  //     console.log(response.data.results);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
   return (
     <>
       <header className="navbar navbar-expand-lg bg-dark">
@@ -17,6 +24,22 @@ function App() {
           <h4>Current Score: 0</h4>
         </div>
       </header>
+      <main>
+        <section className="grid">
+          <div className="gridItem">
+            <Card></Card>
+          </div>
+          <div className="gridItem">grid item</div>
+          <div className="gridItem">grid item</div>
+          <div className="gridItem">grid item</div>
+          <div className="gridItem">grid item</div>
+          <div className="gridItem">grid item</div>
+          <div className="gridItem">grid item</div>
+          <div className="gridItem">grid item</div>
+          <div className="gridItem">grid item</div>
+          <div className="gridItem">grid item</div>
+        </section>
+      </main>
     </>
   );
 }
