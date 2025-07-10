@@ -1,15 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "./components/Card.jsx";
 
 function App() {
-  // async function fetchImages() {
-  //   try {
-  //     let response = await axios.get("https://pokeapi.co/api/v2/pokemon/ditto");
-  //     console.log(response.data.results);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
+  const [pokemons, setPokemons] = useState([
+    { name: "ditto", clicked: false },
+    { name: "pikachu", clicked: false },
+    { name: "bulbasaur", clicked: false },
+    { name: "charmeleon", clicked: false },
+    { name: "squirtle", clicked: false },
+    { name: "vileplume", clicked: false },
+    { name: "butterfree", clicked: false },
+    { name: "caterpie", clicked: false },
+    { name: "weedle", clicked: false },
+    { name: "jigglypuff", clicked: false },
+  ]);
+
+  function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function setToClicked(selected) {
+    console.log(selected);
+    setPokemons((prev) =>
+      prev.map((pokemon) =>
+        pokemon === selected ? { ...pokemon, clicked: true } : pokemon
+      )
+    );
+  }
+
+  useEffect(() => {
+    console.log("Updated pokemons:", pokemons);
+  }, [pokemons]);
+
+  function handleClick(pokemon) {
+    setToClicked(pokemon);
+    let arr = shuffleArray(pokemons);
+    setPokemons(arr);
+  }
+
   return (
     <>
       <header className="navbar navbar-expand-lg bg-dark">
@@ -26,18 +59,15 @@ function App() {
       </header>
       <main>
         <section className="grid">
-          <div className="gridItem">
-            <Card></Card>
-          </div>
-          <div className="gridItem">grid item</div>
-          <div className="gridItem">grid item</div>
-          <div className="gridItem">grid item</div>
-          <div className="gridItem">grid item</div>
-          <div className="gridItem">grid item</div>
-          <div className="gridItem">grid item</div>
-          <div className="gridItem">grid item</div>
-          <div className="gridItem">grid item</div>
-          <div className="gridItem">grid item</div>
+          {pokemons.map((pokemon) => (
+            <div className="gridItem">
+              <div>{pokemon.clicked ? "clicked" : "unclicked"}</div>
+              <Card
+                onClick={() => handleClick(pokemon)}
+                pokemon={pokemon}
+              ></Card>
+            </div>
+          ))}
         </section>
       </main>
     </>
