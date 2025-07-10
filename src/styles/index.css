@@ -26,9 +26,27 @@ header > div {
 }
 
 .gridItem {
-  border: 2px solid black;
+  border: none;
   padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.alert-overlay {
+  position: fixed;
+  z-index: 1050;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+}
+
+.alert-box {
+  min-width: 300px;
+  max-width: 70vw;
 }

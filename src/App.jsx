@@ -2,7 +2,13 @@ import { useState, useEffect } from "react";
 import Card from "./components/Card.jsx";
 
 function App() {
-  const [pokemons, setPokemons] = useState([
+  const [currentScore, setCurrentScore] = useState(0);
+
+  const [highScore, setHighScore] = useState(0);
+
+  const [showAlert, setShowAlert] = useState(false);
+
+  const originalPokemons = [
     { name: "ditto", clicked: false },
     { name: "pikachu", clicked: false },
     { name: "bulbasaur", clicked: false },
@@ -13,7 +19,13 @@ function App() {
     { name: "caterpie", clicked: false },
     { name: "weedle", clicked: false },
     { name: "jigglypuff", clicked: false },
-  ]);
+  ];
+
+  const [pokemons, setPokemons] = useState(originalPokemons);
+
+  const originalIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  const [indices, setIndices] = useState(originalIndices);
 
   function shuffleArray(array) {
     const arr = [...array];
@@ -25,7 +37,6 @@ function App() {
   }
 
   function setToClicked(selected) {
-    console.log(selected);
     setPokemons((prev) =>
       prev.map((pokemon) =>
         pokemon === selected ? { ...pokemon, clicked: true } : pokemon
@@ -34,13 +45,25 @@ function App() {
   }
 
   useEffect(() => {
-    console.log("Updated pokemons:", pokemons);
+    setIndices((prev) => {
+      const newIndices = shuffleArray(prev);
+      return newIndices;
+    });
   }, [pokemons]);
 
   function handleClick(pokemon) {
-    setToClicked(pokemon);
-    let arr = shuffleArray(pokemons);
-    setPokemons(arr);
+    if (pokemon.clicked === true) {
+      if (currentScore > highScore) {
+        setHighScore(currentScore);
+      }
+      setCurrentScore(0);
+      setPokemons(originalPokemons);
+      setIndices(originalIndices);
+      setShowAlert(true);
+    } else {
+      setToClicked(pokemon);
+      setCurrentScore((prev) => prev + 1);
+    }
   }
 
   return (
@@ -53,23 +76,38 @@ function App() {
           <h3>Try not to click any card twice!</h3>
         </div>
         <div>
-          <h4>High Score: 0</h4>
-          <h4>Current Score: 0</h4>
+          <h4>High Score: {highScore}</h4>
+          <h4>Current Score: {currentScore}</h4>
         </div>
       </header>
       <main>
         <section className="grid">
-          {pokemons.map((pokemon) => (
+          {indices.map((index) => (
             <div className="gridItem">
-              <div>{pokemon.clicked ? "clicked" : "unclicked"}</div>
               <Card
-                onClick={() => handleClick(pokemon)}
-                pokemon={pokemon}
+                onClick={() => handleClick(pokemons[index])}
+                pokemon={pokemons[index]}
               ></Card>
             </div>
           ))}
         </section>
       </main>
+      {showAlert && (
+        <div className="alert-overlay" role="alert" aria-modal="true">
+          <div
+            role="alert"
+            className="alert-box alert alert-dismissible alert-danger"
+          >
+            You Lost!
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={() => setShowAlert(false)}
+            ></button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
